@@ -1,0 +1,98 @@
+[project]
+name = "futebol-impostor-app"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Miguel Costa", email = "miguelcosmecosta@email.com" }]
+requires-python = ">=3.13"
+dependencies = [
+    "django>=6.0.6",
+]
+
+# SECURITY: 7-day grace period against supply chain attacks (like in npm)
+[tool.uv]
+exclude-newer = "7 days"
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.411",
+    "pytest>=9.1.1",
+    "pytest-xdist>=3.8.0",
+    "ruff>=0.15.20",
+]
+
+# ============================
+# Lint and formatting (Ruff)
+# ============================
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+fix = true
+show-fixes = true
+indent-width = 4
+exclude = ["venv", ".venv", "env", ".env", "node_modules", "__pycache__"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "A004",   # Checks for imports that use the same names as builtins.
+  "ARG001", # Checks for the presence of unused arguments in function definitions.
+  "ARG002", # Checks for the presence of unused arguments in instance method definitions.
+  "ANN401", # Checks that function arguments are annotated with a more specific type than Any.
+  "COM812", # Checks for the absence of trailing commas.
+  "D",      # All pydocstyle (D)
+  "ERA001", # Checks for commented-out Python code.
+  "INP001", # Checks for packages that are missing an __init__.py file.
+  "S101",   # Checks for uses of the assert keyword.
+  "T201",   # Checks for print statements,
+  "S106"    # Checks for potential uses of hardcoded passwords in function calls.
+]
+
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["ANN201", "S101"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+# ============================
+# Typing (Pyright)
+# ============================
+[tool.pyright]
+typeCheckingMode = "strict"
+pythonVersion = "3.13"
+include = ["src", 'tests']
+exclude = [
+    "**/.*",
+    "**/.venv",
+    "**/venv",
+    "**/env",
+    "**/node_modules",
+    "**/__pycache__",
+]
+venv = ".venv"
+venvPath = "."
+
+# ============================
+# Tests (Pytest)
+# ============================
+[tool.pytest.ini_options]
+addopts = "-s -vv --color=yes --tb=short"
+# Adds 'src' to the Python path during tests. This allows
+# tests in `tests/` to import modules from `src/` without errors.
+pythonpath = ["."]
+testpaths = ["tests"]
+
+
+# ============================
+# Build and Hatchling
+# ============================
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
