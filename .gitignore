@@ -23,6 +23,7 @@ wheels/
 
 # Enviroments (uv)
 .venv/
+.venv
 .env
 
 # Linting and Typing Tools

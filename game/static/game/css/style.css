@@ -1,0 +1,121 @@
+:root {
+  --pitch-night: #0e2a1e;
+  --pitch-mid: #153826;
+  --pitch-line: #2f6b45;
+  --chalk: #f5f1e6;
+  --card-red: #d62839;
+  --card-red-dark: #8f1c26;
+  --led-amber: #ffb627;
+}
+
+.font-display {
+  font-family: "Anton", sans-serif;
+}
+.font-mono {
+  font-family: "JetBrains Mono", monospace;
+}
+.font-body {
+  font-family: "Inter", sans-serif;
+}
+
+.pitch-stripes {
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.025) 0px,
+    rgba(255, 255, 255, 0.025) 40px,
+    transparent 40px,
+    transparent 80px
+  );
+}
+
+.center-circle {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0.12;
+}
+
+dialog::backdrop {
+  backdrop-filter: blur(6px);
+}
+
+input[type="number"].no-spin::-webkit-outer-spin-button,
+input[type="number"].no-spin::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"].no-spin {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+@keyframes flipReveal {
+  0% {
+    transform: rotateX(-90deg);
+    opacity: 0;
+  }
+  60% {
+    transform: rotateX(10deg);
+    opacity: 1;
+  }
+  100% {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+}
+.flip-reveal {
+  animation: flipReveal 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform-style: preserve-3d;
+}
+
+@keyframes ledFlicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.88;
+  }
+}
+.led-digit {
+  color: var(--led-amber);
+  text-shadow:
+    0 0 6px rgba(255, 182, 39, 0.9),
+    0 0 18px rgba(255, 182, 39, 0.45);
+  animation: ledFlicker 2.2s ease-in-out infinite;
+}
+
+@keyframes foilShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.sticker-foil {
+  background: linear-gradient(
+    135deg,
+    #ffd76a 0%,
+    #ffb627 30%,
+    #fff3d0 50%,
+    #ffb627 70%,
+    #ffd76a 100%
+  );
+  background-size: 250% 250%;
+  animation: foilShift 4s ease infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flip-reveal,
+  .led-digit,
+  .sticker-foil {
+    animation: none !important;
+  }
+}

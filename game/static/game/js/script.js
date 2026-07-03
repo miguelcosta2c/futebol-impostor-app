@@ -19,6 +19,7 @@
   const viewNaoImpostor = document.getElementById("view-nao-impostor");
   const viewImpostor = document.getElementById("view-impostor");
   const btnPassarTexto = document.getElementById("btn-passar-texto");
+  const checkMostrarDica = document.getElementById("mostrar-dica");
 
   const participantes = [];
   let indiceAtual = 0;
@@ -47,38 +48,162 @@
     ajustarCampos();
   }
 
-  inputJogadores.addEventListener("input", ajustarCampos);
-  inputImpostores.addEventListener("input", ajustarCampos);
+  function salvarConfiguracoes() {
+    const nomeInputs = document.querySelectorAll("#inputs-nomes input");
+    const nomes = Array.from(nomeInputs).map((inp) => inp.value);
+
+    const cats = document.querySelectorAll('input[name="categoria"]:checked');
+    const categoriasMarcadas = Array.from(cats).map((c) => c.value);
+
+    const dados = {
+      jogadores: inputJogadores.value,
+      impostores: inputImpostores.value,
+      mostrarDica: checkMostrarDica.checked,
+      nomesParticipantes: nomes,
+      categorias: categoriasMarcadas,
+    };
+
+    localStorage.setItem("futebol_impostor_config", JSON.stringify(dados));
+  }
+
+  function carregarConfiguracoes() {
+    const dadosSalvos = localStorage.getItem("futebol_impostor_config");
+    if (!dadosSalvos) return;
+
+    try {
+      const dados = JSON.parse(dadosSalvos);
+
+      inputJogadores.value = dados.jogadores || 4;
+      inputImpostores.value = dados.impostores || 1;
+      checkMostrarDica.checked = dados.mostrarDica !== false; // Padrão true se não existir
+
+      ajustarCampos();
+      gerarInputsNomes(parseInt(inputJogadores.value) || 3);
+
+      if (dados.nomesParticipantes) {
+        const nomeInputs = document.querySelectorAll("#inputs-nomes input");
+        nomeInputs.forEach(function (inp, i) {
+          if (dados.nomesParticipantes[i] !== undefined) {
+            inp.value = dados.nomesParticipantes[i];
+          }
+        });
+      }
+
+      if (dados.categorias) {
+        const cats = document.querySelectorAll('input[name="categoria"]');
+        cats.forEach(function (c) {
+          c.checked = dados.categorias.includes(c.value);
+        });
+      }
+    } catch (e) {
+      console.error("Erro ao carregar configurações salvas:", e);
+    }
+  }
+
+  inputJogadores.addEventListener("input", function () {
+    ajustarCampos();
+    gerarInputsNomes(parseInt(inputJogadores.value) || 3);
+    salvarConfiguracoes();
+  });
+  inputImpostores.addEventListener("input", function () {
+    ajustarCampos();
+    salvarConfiguracoes();
+  });
   inputJogadores.addEventListener("blur", verificarMinimos);
   inputImpostores.addEventListener("blur", verificarMinimos);
-  ajustarCampos();
+
+  const containerNomes = document.getElementById("inputs-nomes");
+  if (containerNomes) {
+    containerNomes.addEventListener("input", salvarConfiguracoes);
+  }
+
+  checkMostrarDica.addEventListener("change", salvarConfiguracoes);
+
+  document.addEventListener("change", function (e) {
+    if (e.target && e.target.name === "categoria") {
+      salvarConfiguracoes();
+    }
+  });
+
+  function gerarInputsNomes(qtd) {
+    const container = document.getElementById("inputs-nomes");
+    if (!container) return;
+    const inputs = container.querySelectorAll("input");
+    const valores = [];
+    inputs.forEach(function (inp, i) {
+      valores[i] = inp.value;
+    });
+    container.innerHTML = "";
+    for (let i = 0; i < qtd; i++) {
+      const inp = document.createElement("input");
+      inp.type = "text";
+      inp.placeholder = "Participante " + (i + 1);
+      inp.value = valores[i] || "";
+      inp.className =
+        "w-full py-1.5 px-2.5 text-sm rounded-lg border border-[var(--pitch-line)] bg-black/30 placeholder:text-[var(--chalk)]/40 focus:ring-2 focus:ring-[var(--led-amber)] outline-none transition-all";
+      container.appendChild(inp);
+    }
+  }
+
+  carregarConfiguracoes();
+
+  if (!localStorage.getItem("futebol_impostor_config")) {
+    ajustarCampos();
+    gerarInputsNomes(parseInt(inputJogadores.value) || 3);
+  }
+
+  document.addEventListener("click", function (e) {
+    const btn = e.target.closest("[data-step]");
+    if (!btn) return;
+    const input = document.getElementById(btn.dataset.step);
+    if (!input) return;
+    const dir = parseInt(btn.dataset.dir) || 0;
+    const valor = parseInt(input.value) || 0;
+    const novoValor = Math.min(
+      parseInt(input.max) || 999,
+      Math.max(parseInt(input.min) || 1, valor + dir),
+    );
+    input.value = novoValor;
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
 
   function mostrarApenas(el) {
-    [estadoInicial, estadoParticipante, estadoRevelado, estadoFim].forEach(function (e) {
-      e.classList.add("hidden");
-    });
+    [estadoInicial, estadoParticipante, estadoRevelado, estadoFim].forEach(
+      function (e) {
+        e.classList.add("hidden");
+      },
+    );
     el.classList.remove("hidden");
   }
 
-  function sortearJogadores(qtd) {
-    const promises = [];
-    for (let i = 0; i < qtd; i++) {
-      promises.push(
-        fetch("/", { headers: { "HX-Request": "true" } }).then(function (r) {
-          if (!r.ok) throw new Error("Erro ao buscar jogador");
-          return r.text();
-        }).then(function (html) {
-          const doc = new DOMParser().parseFromString(html, "text/html");
-          const el = doc.body.firstElementChild;
-          return {
-            nome: el.getAttribute("data-nome"),
-            foto: el.getAttribute("data-foto"),
-            dicas: el.getAttribute("data-dicas"),
-          };
-        })
+  function sortearJogador() {
+    const cats = document.querySelectorAll('input[name="categoria"]:checked');
+    const params = new URLSearchParams();
+    if (cats.length > 0) {
+      params.set(
+        "categorias",
+        Array.from(cats)
+          .map(function (c) {
+            return c.value;
+          })
+          .join(","),
       );
     }
-    return Promise.all(promises);
+    const url = "/?" + params.toString();
+    return fetch(url, { headers: { "HX-Request": "true" } })
+      .then(function (r) {
+        if (!r.ok) throw new Error("Erro ao buscar jogador");
+        return r.text();
+      })
+      .then(function (html) {
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const el = doc.body.firstElementChild;
+        return {
+          nome: el.getAttribute("data-nome"),
+          foto: el.getAttribute("data-foto"),
+          dicas: el.getAttribute("data-dicas"),
+        };
+      });
   }
 
   function embaralhar(array) {
@@ -90,33 +215,44 @@
   }
 
   document.getElementById("btn-sortear").addEventListener("click", function () {
+    verificarMinimos();
+
     const qtd = parseInt(inputJogadores.value) || 4;
     const qtdImp = parseInt(inputImpostores.value) || 1;
 
-    sortearJogadores(qtd).then(function (jogadores) {
-      participantes.length = 0;
-      indiceAtual = 0;
+    sortearJogador()
+      .then(function (jogador) {
+        participantes.length = 0;
+        indiceAtual = 0;
 
-      const indices = embaralhar([...Array(qtd).keys()]);
-      const impSet = new Set(indices.slice(0, qtdImp));
-
-      for (let i = 0; i < qtd; i++) {
-        participantes.push({
-          numero: i + 1,
-          jogador: jogadores[i],
-          ehImpostor: impSet.has(i),
+        const nomeInputs = document.querySelectorAll("#inputs-nomes input");
+        const nomes = [];
+        nomeInputs.forEach(function (inp, i) {
+          nomes[i] = inp.value.trim() || "Participante " + (i + 1);
         });
-      }
 
-      mostrarParticipante();
-    }).catch(function () {
-      mostrarApenas(estadoInicial);
-    });
+        const indices = embaralhar([...Array(qtd).keys()]);
+        const impSet = new Set(indices.slice(0, qtdImp));
+
+        for (let i = 0; i < qtd; i++) {
+          participantes.push({
+            numero: i + 1,
+            nome: nomes[i] || "Participante " + (i + 1),
+            jogador: jogador,
+            ehImpostor: impSet.has(i),
+          });
+        }
+
+        mostrarParticipante();
+      })
+      .catch(function () {
+        mostrarApenas(estadoInicial);
+      });
   });
 
   function mostrarParticipante() {
     const p = participantes[indiceAtual];
-    participanteNome.textContent = "Participante " + p.numero;
+    participanteNome.textContent = p.nome;
     btnPassarTexto.textContent = "Passar";
     mostrarApenas(estadoParticipante);
   }
@@ -125,7 +261,9 @@
     const p = participantes[indiceAtual];
 
     if (p.ehImpostor) {
-      jogadorDicas.textContent = p.jogador.dicas;
+      jogadorDicas.textContent = checkMostrarDica.checked
+        ? p.jogador.dicas
+        : "Sem dica, tente adivinhar!";
       viewNaoImpostor.classList.add("hidden");
       viewImpostor.classList.remove("hidden");
     } else {
