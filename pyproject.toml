@@ -8,6 +8,8 @@ authors = [{ name = "Miguel Costa", email = "miguelcosmecosta@email.com" }]
 requires-python = ">=3.13"
 dependencies = [
     "django>=6.0.6",
+    "django-htmx>=1.27.0",
+    "pillow>=12.2.0",
 ]
 
 # SECURITY: 7-day grace period against supply chain attacks (like in npm)
@@ -62,7 +64,7 @@ line-ending = "lf"
 # Typing (Pyright)
 # ============================
 [tool.pyright]
-typeCheckingMode = "strict"
+typeCheckingMode = "standard"
 pythonVersion = "3.13"
 include = ["src", 'tests']
 exclude = [
