@@ -1,5 +1,175 @@
+
 {% extends "global/base.html" %}
+{% load static %}
+
+{% block headers %}
+  <script src="{% static "game/js/script.js" %}" defer></script>
+{% endblock %}
 
 {% block content %}
-  <h1>Hello, World!</h1>
+  <main class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-fuchsia-50 flex flex-col items-center justify-center p-6 font-sans">
+
+    <div class="text-center mb-10">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-white rounded-2xl mb-4 shadow-lg shadow-indigo-500/20">
+        <span class="text-3xl">⚽</span>
+      </div>
+      <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl">
+        Futebol Impostor
+      </h1>
+      <p class="mt-3 text-gray-500 text-sm sm:text-base">
+        Descubra o impostor entre seus amigos!
+      </p>
+    </div>
+
+    <div class="w-full max-w-md bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl shadow-indigo-500/5 border border-amber-200/40 mb-8 space-y-6">
+
+      <div class="flex flex-col gap-2">
+        <label for="numero-jogadores" class="text-sm font-semibold text-gray-700">
+          Número de participantes
+        </label>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+            👥
+          </div>
+          <input type="number"
+                 name="numero-jogadores"
+                 id="numero-jogadores"
+                 placeholder="Ex: 4"
+                 value=4
+                 min="3"
+                 class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-amber-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400">
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="numero-impostores" class="text-sm font-semibold text-gray-700">
+          Número de impostores
+        </label>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+            🕵️
+          </div>
+          <input type="number"
+                 name="numero-impostores"
+                 id="numero-impostores"
+                 placeholder="Ex: 1"
+                 value=1
+                 min="1"
+                 class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-amber-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400">
+        </div>
+      </div>
+
+    </div>
+
+    <button commandfor="modal"
+            command="show-modal"
+            class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-700 hover:to-fuchsia-700 active:scale-95 text-white font-semibold px-10 py-3.5 rounded-xl shadow-lg shadow-indigo-500/20 hover:shadow-xl hover:shadow-indigo-500/30 transition-all cursor-pointer">
+      <span>⚽</span>
+      Jogar
+    </button>
+
+    <dialog id="modal"
+            class="fixed inset-0 m-auto max-w-lg w-[calc(100%-2rem)] h-min bg-white p-10 rounded-3xl shadow-2xl border border-amber-200/40 text-center outline-none backdrop:bg-indigo-900/40 backdrop:backdrop-blur-md">
+
+      <div id="area-jogo" class="flex flex-col items-center gap-6 w-full">
+
+        <div id="estado-inicial" class="flex flex-col items-center gap-6 w-full">
+            <div class="w-16 h-16 bg-gradient-to-br from-indigo-400 to-fuchsia-500 text-white rounded-full grid place-items-center text-3xl shadow-lg shadow-indigo-500/30 shrink-0">
+              <span class="leading-none">ℹ️</span>
+            </div>
+          <div class="space-y-2 w-full">
+            <h3 class="text-2xl font-bold text-gray-900">Pronto para jogar?</h3>
+            <p class="text-gray-500 text-sm leading-relaxed max-w-sm mx-auto">
+              Configure os participantes e clique em Sortear para começar.
+            </p>
+          </div>
+            <button id="btn-sortear"
+                    class="w-full bg-gradient-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-700 hover:to-fuchsia-700 text-white font-semibold px-4 py-3.5 rounded-xl transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-indigo-500 outline-none shadow-lg shadow-indigo-500/20 hover:shadow-xl hover:shadow-indigo-500/30 active:scale-[0.98] mt-4">
+            Sortear
+          </button>
+        </div>
+
+        <div id="estado-participante" class="hidden flex-col items-center gap-6 w-full">
+            <div class="w-full mb-10 h-16 bg-gradient-to-br from-amber-400 to-orange-500 text-white rounded-full grid place-items-center text-3xl shadow-lg shadow-amber-500/30 shrink-0">
+              <span class="leading-none">👤</span>
+            </div>
+          <div class="space-y-2 w-full">
+            <p class="text-sm font-medium text-amber-600 tracking-widest uppercase">Vez de</p>
+            <h3 id="participante-nome" class="text-3xl font-bold text-gray-900">Participante 1</h3>
+            <p class="text-gray-400 text-sm">Clique abaixo para descobrir sua função.</p>
+          </div>
+            <button id="btn-mostrar"
+                    class="w-full bg-gradient-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-700 hover:to-fuchsia-700 text-white font-semibold px-4 py-3.5 rounded-xl transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-indigo-500 outline-none shadow-lg shadow-indigo-500/20 hover:shadow-xl hover:shadow-indigo-500/30 active:scale-[0.98] mt-4">
+              Revelar Função
+            </button>
+          </div>
+
+          <div id="estado-revelado" class="hidden flex-col items-center gap-6 w-full">
+
+          <div id="view-nao-impostor" class="hidden flex-col items-center gap-6 w-full">
+            <div class="w-full mb-10 h-16 bg-gradient-to-br from-teal-400 to-cyan-500 text-white rounded-full grid place-items-center text-3xl shadow-lg shadow-teal-500/30 shrink-0">
+              <span class="leading-none">🏅</span>
+            </div>
+            <div class="w-full text-center">
+              <p class="text-xs font-bold text-teal-600 uppercase tracking-widest">Seu jogador é</p>
+            </div>
+            <div id="jogador-card" class="flex items-center gap-5 bg-gradient-to-br from-teal-50 to-white rounded-2xl p-5 border border-teal-200 w-full shadow-md">
+              <img id="jogador-foto"
+                   src=""
+                   alt=""
+                   class="w-20 h-20 rounded-full object-cover flex-shrink-0 ring-2 ring-teal-300 shadow-sm">
+              <div class="flex-1 text-left min-w-0">
+                <p id="jogador-nome" class="text-lg font-bold text-gray-900 truncate"></p>
+              </div>
+            </div>
+            <span class="bg-gradient-to-r from-teal-50 to-cyan-50 text-teal-700 text-sm font-bold px-5 py-1.5 rounded-full border border-teal-200 shadow-sm">
+              🏅 Não-Impostor
+            </span>
+          </div>
+
+          <div id="view-impostor" class="hidden flex-col items-center gap-6 w-full">
+            <div class="w-full mb-10 h-16 bg-gradient-to-br from-rose-400 to-pink-500 text-white rounded-full grid place-items-center text-3xl shadow-lg shadow-rose-500/30 shrink-0">
+              <span class="leading-none">🕵️</span>
+            </div>
+            <div class="w-full text-center">
+              <p class="text-xs font-bold text-rose-600 uppercase tracking-widest">Sua dica secreta</p>
+            </div>
+            <div class="bg-gradient-to-br from-rose-50 to-white rounded-2xl p-6 border border-rose-200 w-full shadow-md">
+              <p id="jogador-dicas" class="text-lg text-rose-700 font-bold text-center leading-relaxed"></p>
+            </div>
+            <span class="bg-gradient-to-r from-rose-50 to-pink-50 text-rose-700 text-sm font-bold px-5 py-1.5 rounded-full border border-rose-200 shadow-sm">
+              🕵️ Impostor
+            </span>
+          </div>
+
+            <button id="btn-passar"
+                    class="w-full bg-amber-50 hover:bg-amber-100 text-amber-800 font-semibold px-4 py-3 rounded-xl transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-amber-400 outline-none active:scale-[0.98] border border-amber-200/50 shadow-sm hover:shadow-md mt-4">
+            <span id="btn-passar-texto">Passar</span>
+          </button>
+        </div>
+
+        <div id="estado-fim" class="hidden flex-col items-center gap-6 w-full">
+            <div class="w-full mb-10 h-16 bg-gradient-to-br from-emerald-400 to-green-500 text-white rounded-full grid place-items-center text-3xl shadow-lg shadow-emerald-500/30 shrink-0">
+              <span class="leading-none">🎉</span>
+            </div>
+          <div class="space-y-2 w-full">
+            <h3 class="text-2xl font-bold text-gray-900">Jogo Finalizado!</h3>
+            <p class="text-gray-500 text-sm leading-relaxed max-w-sm mx-auto">
+              Todos os participantes viram suas funções.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <button id="btn-fechar"
+              commandfor="modal"
+              command="close"
+              class="hidden mt-8 w-full bg-amber-50 hover:bg-amber-100 text-amber-800 font-semibold px-4 py-3 rounded-xl transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-amber-400 outline-none active:scale-[0.98] border border-amber-200/50 shadow-sm hover:shadow-md">
+        Fechar
+      </button>
+
+    </dialog>
+
+  </main>
 {% endblock %}

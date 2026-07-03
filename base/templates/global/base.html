@@ -1,4 +1,5 @@
 {% load django_htmx %}
+{% load tailwind_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}{% endblock %}</title>
   {% htmx_script %}
+  {% tailwind_css %}
+  {% block headers %}{% endblock %}
 </head>
 <body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
   {% block content %}{% endblock %}

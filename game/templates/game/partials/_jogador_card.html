@@ -1,0 +1,12 @@
+<div class="flex items-center gap-4 bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-amber-200/40 shadow-md"
+     data-nome="{{ jogador.nome }}"
+     data-foto="{{ jogador.foto.url }}"
+     data-dicas="{{ jogador.dicas }}">
+  <img src="{{ jogador.foto.url }}"
+       alt="{{ jogador.nome }}"
+       class="w-14 h-14 rounded-full object-cover flex-shrink-0 ring-2 ring-indigo-200 shadow-sm">
+  <div class="flex-1 min-w-0">
+    <h2 class="text-base font-bold text-gray-900 truncate">{{ jogador.nome }}</h2>
+    <p class="text-sm text-gray-500 truncate">{{ jogador.dicas }}</p>
+  </div>
+</div>

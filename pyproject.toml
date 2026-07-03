@@ -7,8 +7,10 @@ license = "MIT"
 authors = [{ name = "Miguel Costa", email = "miguelcosmecosta@email.com" }]
 requires-python = ">=3.13"
 dependencies = [
+    "cookiecutter>=2.7.1",
     "django>=6.0.6",
     "django-htmx>=1.27.0",
+    "django-tailwind>=4.5.0",
     "pillow>=12.2.0",
 ]
 
