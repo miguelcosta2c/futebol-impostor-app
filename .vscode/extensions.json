@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "batisteo.vscode-django",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "charliermarsh.ruff"
+  ]
+}
