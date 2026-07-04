@@ -13,6 +13,7 @@ class HttpRequest(HttpRequestBase):
 
 
 def home(request: HttpRequest) -> HttpResponse:
+    # Verifica se a request vem do HTMX ou vem de uma requisição GET normal do navegador
     if request.htmx:
         qs = Jogador.objects.all()
         categorias = request.GET.get("categorias")
@@ -38,6 +39,9 @@ def home(request: HttpRequest) -> HttpResponse:
             sorteados = []
             disponiveis = todos_os_ids
 
+        # Linter reclama do uso do pacote random, pois ele não é recomendado para
+        # uso em criptografias, porém, pelo fato da utilização dele ser para fins de
+        # diversão e não comprometer nenhum dado, optei por utilizá-lo.
         id_escolhido = random.choice(disponiveis)  # noqa: S311
 
         sorteados.append(id_escolhido)

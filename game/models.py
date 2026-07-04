@@ -10,6 +10,7 @@ from PIL import Image
 
 
 def validar_tamanho_imagem(campo_arquivo: FieldFile) -> None:
+    """Valida se o tamanho da imagem é menor que 2MB"""
     limite_megabytes = 2
     limite_bytes = limite_megabytes * 1024 * 1024
 
@@ -34,6 +35,15 @@ class Categoria(models.Model):
 
 
 class Jogador(models.Model):
+    """Representa um jogador cadastrado no sistema para o sorteio nas partidas.
+
+    Attributes:
+        nome (str): Nome completo ou apelido do jogador.
+        foto (FieldFile): Foto demonstrativa do jogador.
+        dicas (str): Dica(s) para o usuario encontrar o jogador
+        categoria (ForeignKey): A categoria atual do jogador (vinculada ao model Categoria).
+    """  # noqa: E501
+
     nome = models.CharField(max_length=150, unique=True, verbose_name="Nome do Jogador")
     foto = models.ImageField(
         upload_to="fotos_jogadores/%Y/%m/%d/",
@@ -58,6 +68,7 @@ class Jogador(models.Model):
         return self.nome
 
     def save(self, *args: Any, **kwargs: Any) -> None:
+        """Salva e valida a foto do jogador"""
         if self.foto:
             img = Image.open(self.foto)
 
