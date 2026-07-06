@@ -19,4 +19,7 @@ echo "---> Coletando arquivos estáticos..."
 uv run python manage.py tailwind build
 uv run python manage.py collectstatic --noinput --clear
 
+echo "---> Criando superuser..."
+uv run python manage.py createsuperuser --noinput || true
+
 echo "---> Build concluído com sucesso!"
