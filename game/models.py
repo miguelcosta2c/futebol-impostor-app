@@ -49,6 +49,8 @@ class Jogador(models.Model):
         upload_to="fotos_jogadores/%Y/%m/%d/",
         validators=[validar_tamanho_imagem],
         verbose_name="Foto do Jogador",
+        blank=True,
+        null=True,
     )
     dicas = models.CharField(max_length=255, verbose_name="Dicas para o Jogador")
     categoria = models.ForeignKey(

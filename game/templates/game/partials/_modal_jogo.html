@@ -1,0 +1,95 @@
+<dialog id="modal"
+        class="fixed inset-0 m-auto max-w-lg w-[calc(100%-2rem)] h-min bg-[var(--pitch-mid)] p-8 sm:p-10 rounded-3xl shadow-2xl border border-[var(--pitch-line)] text-center outline-none backdrop:bg-black/60 font-body text-[var(--chalk)]">
+
+  <div id="area-jogo" class="flex flex-col items-center gap-6 w-full" style="perspective: 1000px;">
+
+    <div id="estado-inicial" class="flex flex-col items-center gap-6 w-full">
+      <div class="w-14 h-14 bg-white/5 border border-[var(--pitch-line)] text-[var(--led-amber)] rounded-full grid place-items-center text-2xl shrink-0">
+        <span class="leading-none">⚽</span>
+      </div>
+      <div class="space-y-2 w-full">
+        <h3 class="font-display text-2xl uppercase tracking-wide">Pronto pra escalação?</h3>
+        <p class="text-[var(--chalk)]/60 text-sm leading-relaxed max-w-sm mx-auto">
+          Ajuste o time em Configurações e toque em Sortear Escalação.
+        </p>
+      </div>
+      <button id="btn-sortear"
+              class="w-full bg-[var(--led-amber)] hover:brightness-110 text-[var(--pitch-night)] font-bold px-4 py-3.5 rounded-xl transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[var(--led-amber)] outline-none shadow-lg shadow-black/30 active:scale-[0.98] mt-2 uppercase tracking-wide text-sm">
+        Sortear Escalação
+      </button>
+    </div>
+
+    <div id="estado-participante" class="hidden flex flex-col items-center gap-6 w-full">
+      <div class="w-full bg-black rounded-xl border-2 border-[var(--pitch-line)] py-8 px-4">
+        <p class="text-[10px] font-bold tracking-[0.3em] text-[var(--chalk)]/50 uppercase mb-3">Vez de</p>
+        <h3 id="participante-nome" class="led-digit font-mono text-4xl sm:text-5xl font-bold uppercase">Participante 1</h3>
+      </div>
+      <p class="text-[var(--chalk)]/60 text-sm">Passe o celular e toque para revelar sua função.</p>
+      <button id="btn-mostrar"
+              class="w-full bg-[var(--led-amber)] hover:brightness-110 text-[var(--pitch-night)] font-bold px-4 py-3.5 rounded-xl transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[var(--led-amber)] outline-none shadow-lg shadow-black/30 active:scale-[0.98] uppercase tracking-wide text-sm">
+        Revelar Função
+      </button>
+    </div>
+
+    <div id="estado-revelado" class="hidden flex flex-col items-center gap-6 w-full">
+
+      <div id="view-nao-impostor" class="hidden flex flex-col items-center gap-5 w-full flip-reveal">
+        <p class="text-[10px] font-bold tracking-[0.3em] text-[var(--led-amber)] uppercase">Sua figurinha</p>
+        <div id="jogador-card" class="sticker-foil relative w-full rounded-2xl p-1 shadow-xl shadow-black/40">
+          <div class="bg-[var(--pitch-mid)] rounded-[14px] p-4 flex items-center gap-4">
+            <div class="relative flex-shrink-0">
+              <img id="jogador-foto"
+                    src=""
+                    alt=""
+                    class="w-20 h-20 rounded-lg object-cover ring-2 ring-[var(--led-amber)]/60">
+              <div id="jogador-foto-placeholder"
+                    class="hidden w-20 h-20 rounded-lg flex items-center justify-center text-3xl bg-white/10 ring-2 ring-[var(--led-amber)]/60">⚽</div>
+            </div>
+            <div class="flex-1 text-left min-w-0">
+              <p class="text-[10px] font-bold text-[var(--led-amber)] uppercase tracking-widest mb-1">Não-Impostor</p>
+              <p id="jogador-nome" class="font-display text-xl uppercase truncate"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-impostor" class="hidden flex flex-col items-center gap-5 w-full flip-reveal">
+        <p class="text-[10px] font-bold tracking-[0.3em] text-[var(--card-red)] uppercase">Cartão vermelho</p>
+        <div class="w-full max-w-[220px] aspect-[3/4] bg-[var(--card-red)] rounded-2xl shadow-xl shadow-black/40 mx-auto flex flex-col items-center justify-center gap-3 p-6 border-4 border-[var(--card-red-dark)]">
+          <span class="text-4xl">🕵️</span>
+          <p class="font-display text-white uppercase tracking-wide text-sm">Impostor</p>
+        </div>
+        <div class="bg-white/5 border border-[var(--pitch-line)] rounded-xl p-4 w-full">
+          <p class="text-[10px] font-bold text-[var(--chalk)]/50 uppercase tracking-widest mb-1">Dica do juiz</p>
+          <p id="jogador-dicas" class="font-mono text-base text-[var(--chalk)]"></p>
+        </div>
+      </div>
+
+      <button id="btn-passar"
+              class="w-full bg-white/5 hover:bg-white/10 text-[var(--chalk)] font-semibold px-4 py-3 rounded-xl transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[var(--led-amber)] outline-none active:scale-[0.98] border border-[var(--pitch-line)] mt-2 uppercase tracking-wide text-sm">
+        <span id="btn-passar-texto">Passar</span>
+      </button>
+    </div>
+
+    <div id="estado-fim" class="hidden flex flex-col items-center gap-6 w-full">
+      <div class="w-14 h-14 bg-white/5 border border-[var(--pitch-line)] text-[var(--led-amber)] rounded-full grid place-items-center text-2xl shrink-0">
+        <span class="leading-none">🏁</span>
+      </div>
+      <div class="space-y-2 w-full">
+        <h3 class="font-display text-2xl uppercase tracking-wide">Apito final!</h3>
+        <p class="text-[var(--chalk)]/60 text-sm leading-relaxed max-w-sm mx-auto">
+          Todos já viram sua função. Hora do debate: quem é o impostor?
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <button id="btn-fechar"
+          commandfor="modal"
+          command="close"
+          class="hidden mt-8 w-full bg-white/5 hover:bg-white/10 text-[var(--chalk)] font-semibold px-4 py-3 rounded-xl transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[var(--led-amber)] outline-none active:scale-[0.98] border border-[var(--pitch-line)] uppercase tracking-wide text-sm">
+    Fechar
+  </button>
+
+</dialog>

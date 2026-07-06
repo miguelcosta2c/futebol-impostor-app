@@ -14,6 +14,7 @@
   const participanteNome = document.getElementById("participante-nome");
   const jogadorCard = document.getElementById("jogador-card");
   const jogadorFoto = document.getElementById("jogador-foto");
+  const jogadorFotoPlaceholder = document.getElementById("jogador-foto-placeholder");
   const jogadorNome = document.getElementById("jogador-nome");
   const jogadorDicas = document.getElementById("jogador-dicas");
   const viewNaoImpostor = document.getElementById("view-nao-impostor");
@@ -267,8 +268,15 @@
       viewNaoImpostor.classList.add("hidden");
       viewImpostor.classList.remove("hidden");
     } else {
-      jogadorFoto.src = p.jogador.foto;
-      jogadorFoto.alt = p.jogador.nome;
+      if (p.jogador.foto) {
+        jogadorFoto.src = p.jogador.foto;
+        jogadorFoto.alt = p.jogador.nome;
+        jogadorFoto.classList.remove("hidden");
+        jogadorFotoPlaceholder.classList.add("hidden");
+      } else {
+        jogadorFoto.classList.add("hidden");
+        jogadorFotoPlaceholder.classList.remove("hidden");
+      }
       jogadorNome.textContent = p.jogador.nome;
       viewImpostor.classList.add("hidden");
       viewNaoImpostor.classList.remove("hidden");

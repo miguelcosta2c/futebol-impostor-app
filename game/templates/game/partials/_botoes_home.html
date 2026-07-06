@@ -1,0 +1,25 @@
+<div class="flex flex-col md:flex-row items-stretch md:items-center gap-3 relative z-10 w-full max-w-md md:max-w-none mx-auto px-4 md:px-0">
+
+  <button commandfor="modal"
+          command="show-modal"
+          class="inline-flex items-center justify-center gap-2 bg-[var(--led-amber)] hover:brightness-110 active:scale-95 text-[var(--pitch-night)] font-bold px-8 py-3.5 rounded-full shadow-lg shadow-black/30 transition-all cursor-pointer uppercase tracking-wide text-sm w-full md:w-auto">
+    <span>📯</span>
+    Jogar
+  </button>
+
+  <button commandfor="modal-config"
+          command="show-modal"
+          class="inline-flex items-center justify-center gap-2 bg-transparent hover:bg-white/5 active:scale-95 text-[var(--chalk)] font-semibold px-6 py-3.5 rounded-full border border-[var(--chalk)]/20 transition-all cursor-pointer text-sm w-full md:w-auto">
+    <span>⚙️</span>
+    Configurações
+  </button>
+
+  {% if request.user.is_staff %}
+    <a href="{% url 'admin:game_jogador_changelist' %}"
+      class="inline-flex items-center justify-center gap-2 bg-transparent hover:bg-white/5 active:scale-95 text-[var(--chalk)] font-semibold px-6 py-3.5 rounded-full border border-[var(--chalk)]/20 transition-all cursor-pointer text-sm no-underline w-full md:w-auto">
+      <span>🛡️</span>
+      Admin
+    </a>
+  {% endif %}
+
+</div>

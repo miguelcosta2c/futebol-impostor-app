@@ -1,0 +1,83 @@
+<dialog id="modal-config"
+        class="fixed inset-0 m-auto max-w-md w-[calc(100%-2rem)] h-min bg-[var(--pitch-mid)] p-8 rounded-3xl shadow-2xl border border-[var(--pitch-line)] text-center outline-none backdrop:bg-black/60 font-body text-[var(--chalk)]">
+
+  <div class="flex flex-col gap-6 w-full">
+
+    <div class="w-14 h-14 bg-white/5 border border-[var(--pitch-line)] text-[var(--led-amber)] rounded-full grid place-items-center text-2xl shrink-0 mx-auto">
+      <span class="leading-none">📋</span>
+    </div>
+
+    <h2 class="font-display text-2xl uppercase tracking-wide">Configurações</h2>
+
+    <div class="flex flex-col gap-2 text-left">
+      <label for="numero-jogadores" class="text-xs font-bold text-[var(--chalk)]/60 uppercase tracking-widest">
+        Participantes
+      </label>
+      <div class="flex items-center gap-2">
+        <button type="button" data-step="numero-jogadores" data-dir="-1" aria-label="Diminuir participantes"
+                class="w-11 h-11 shrink-0 rounded-lg border border-[var(--pitch-line)] text-[var(--chalk)] hover:bg-white/5 active:scale-95 transition-all text-lg font-bold cursor-pointer">−</button>
+        <input type="number"
+                name="numero-jogadores"
+                id="numero-jogadores"
+                value="4"
+                min="3"
+                max="12"
+                class="no-spin w-full text-center font-mono text-lg py-2.5 rounded-lg border border-[var(--pitch-line)] bg-black/30 focus:ring-2 focus:ring-[var(--led-amber)] outline-none transition-all">
+        <button type="button" data-step="numero-jogadores" data-dir="1" aria-label="Aumentar participantes"
+                class="w-11 h-11 shrink-0 rounded-lg border border-[var(--pitch-line)] text-[var(--chalk)] hover:bg-white/5 active:scale-95 transition-all text-lg font-bold cursor-pointer">+</button>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2 text-left">
+      <label for="numero-impostores" class="text-xs font-bold text-[var(--chalk)]/60 uppercase tracking-widest">
+        Impostores
+      </label>
+      <div class="flex items-center gap-2">
+        <button type="button" data-step="numero-impostores" data-dir="-1" aria-label="Diminuir impostores"
+                class="w-11 h-11 shrink-0 rounded-lg border border-[var(--pitch-line)] text-[var(--chalk)] hover:bg-white/5 active:scale-95 transition-all text-lg font-bold cursor-pointer">−</button>
+        <input type="number"
+                name="numero-impostores"
+                id="numero-impostores"
+                value="1"
+                min="1"
+                class="no-spin w-full text-center font-mono text-lg py-2.5 rounded-lg border border-[var(--pitch-line)] bg-black/30 focus:ring-2 focus:ring-[var(--led-amber)] outline-none transition-all">
+        <button type="button" data-step="numero-impostores" data-dir="1" aria-label="Aumentar impostores"
+                class="w-11 h-11 shrink-0 rounded-lg border border-[var(--pitch-line)] text-[var(--chalk)] hover:bg-white/5 active:scale-95 transition-all text-lg font-bold cursor-pointer">+</button>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1.5 text-left">
+      <p class="text-xs font-bold text-[var(--chalk)]/60 uppercase tracking-widest">Nomes</p>
+      <div id="inputs-nomes" class="grid grid-cols-2 sm:grid-cols-3 gap-5"></div>
+    </div>
+
+    <div class="flex flex-col gap-2 text-left">
+      <p class="text-xs font-bold text-[var(--chalk)]/60 uppercase tracking-widest">Categorias</p>
+      <div class="flex flex-wrap gap-2">
+        {% for cat in categorias %}
+        <label class="flex items-center gap-2 cursor-pointer select-none border border-[var(--pitch-line)] rounded-lg px-3 py-2 hover:bg-white/5 text-sm">
+          <input type="checkbox" name="categoria" value="{{ cat.id }}" checked
+                  class="w-4 h-4 rounded border-[var(--pitch-line)] text-[var(--led-amber)] focus:ring-[var(--led-amber)] cursor-pointer accent-[var(--led-amber)]">
+          {{ cat.nome }}
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <label class="flex items-center justify-between gap-3 cursor-pointer select-none text-left border border-[var(--pitch-line)] rounded-xl px-4 py-3">
+      <span class="text-sm font-semibold">Mostrar dica pro impostor</span>
+      <input type="checkbox"
+              id="mostrar-dica"
+              checked
+              class="w-5 h-5 rounded border-[var(--pitch-line)] text-[var(--led-amber)] focus:ring-[var(--led-amber)] cursor-pointer accent-[var(--led-amber)]">
+    </label>
+
+    <button commandfor="modal-config"
+            command="close"
+            class="w-full bg-white/5 hover:bg-white/10 text-[var(--chalk)] font-semibold px-4 py-3 rounded-xl transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[var(--led-amber)] outline-none active:scale-[0.98] border border-[var(--pitch-line)] uppercase tracking-wide text-sm">
+      Fechar
+    </button>
+
+  </div>
+
+</dialog>

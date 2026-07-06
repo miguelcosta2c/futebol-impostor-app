@@ -13,29 +13,29 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Categoria',
+            name="Categoria",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nome', models.CharField(max_length=100, unique=True, verbose_name='Nome da Categoria')),
-                ('slug', models.SlugField(max_length=100, unique=True, verbose_name='Slug (URL)')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("nome", models.CharField(max_length=100, unique=True, verbose_name="Nome da Categoria")),
+                ("slug", models.SlugField(max_length=100, unique=True, verbose_name="Slug (URL)")),
             ],
             options={
-                'verbose_name': 'Categoria',
-                'verbose_name_plural': 'Categorias',
+                "verbose_name": "Categoria",
+                "verbose_name_plural": "Categorias",
             },
         ),
         migrations.CreateModel(
-            name='Jogador',
+            name="Jogador",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nome', models.CharField(max_length=150, unique=True, verbose_name='Nome do Jogador')),
-                ('foto', models.ImageField(upload_to='fotos_jogadores/%Y/%m/%d/', verbose_name='Foto do Jogador')),
-                ('dicas', models.CharField(max_length=255, verbose_name='Dicas para o Jogador')),
-                ('categoria', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='jogadores', to='game.categoria', verbose_name='Categoria')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("nome", models.CharField(max_length=150, unique=True, verbose_name="Nome do Jogador")),
+                ("foto", models.ImageField(upload_to="fotos_jogadores/%Y/%m/%d/", verbose_name="Foto do Jogador")),
+                ("dicas", models.CharField(max_length=255, verbose_name="Dicas para o Jogador")),
+                ("categoria", models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name="jogadores", to="game.categoria", verbose_name="Categoria")),
             ],
             options={
-                'verbose_name': 'Jogador',
-                'verbose_name_plural': 'Jogadores',
+                "verbose_name": "Jogador",
+                "verbose_name_plural": "Jogadores",
             },
         ),
     ]
