@@ -1,0 +1,22 @@
+databases:
+  - name: futebol-impostor-db
+    plan: free
+    databaseName: futebol_impostor
+    user: futebol_user
+
+services:
+  - type: web
+    plan: free
+    name: futebol-impostor-app
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "uv run gunicorn core.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: futebol-impostor-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 2
