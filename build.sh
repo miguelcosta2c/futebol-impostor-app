@@ -16,6 +16,7 @@ echo "---> Rodando migrações do banco de dados..."
 uv run python manage.py migrate
 
 echo "---> Coletando arquivos estáticos..."
+uv run python manage.py tailwind build
 uv run python manage.py collectstatic --noinput --clear
 
 echo "---> Build concluído com sucesso!"
